@@ -1,1 +1,1 @@
-include ':app', ':YCSlideLib'
+include ':entry', ':YCSlideLib'

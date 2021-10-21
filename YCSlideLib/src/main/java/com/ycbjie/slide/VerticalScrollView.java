@@ -1,39 +1,30 @@
 package com.ycbjie.slide;
 
-import android.content.Context;
-import android.os.Build;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.widget.ScrollView;
+import ohos.agp.components.AttrSet;
+import ohos.agp.components.ScrollView;
+import ohos.app.Context;
 
-
-/**
- * <pre>
- *     @author yangchong
- *     blog  : https://github.com/yangchong211/YCShopDetailLayout
- *     time  : 2018/6/6
- *     desc  : 当ScrollView在最顶部或者最底部的时候，不消费事件
- *     revise:
- * </pre>
- */
 public class VerticalScrollView extends ScrollView {
-
-    private float downX;
-    private float downY;
 
     public VerticalScrollView(Context context) {
         this(context, null);
     }
 
-    public VerticalScrollView(Context context, AttributeSet attrs) {
-        this(context, attrs, android.R.attr.scrollViewStyle);
+    public VerticalScrollView(Context context, AttrSet attrSet) {
+        super(context, attrSet);
     }
 
-    public VerticalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    private boolean isTop() {
+        return !canScroll(DRAG_UP);
     }
 
-    @Override
+    private boolean isBottom() {
+        return !canScroll(DRAG_DOWN);
+    }
+
+    //TODO : dispatchTouch eventAPI not available in current API release
+
+    /*@Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -65,14 +56,5 @@ public class VerticalScrollView extends ScrollView {
                 break;
         }
         return super.dispatchTouchEvent(ev);
-    }
-
-    private boolean isTop() {
-        return !canScrollVertically(-1);
-    }
-
-    private boolean isBottom() {
-        return !canScrollVertically(1);
-    }
-
+    }*/
 }

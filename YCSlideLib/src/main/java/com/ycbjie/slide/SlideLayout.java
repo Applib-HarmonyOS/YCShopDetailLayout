@@ -1,43 +1,27 @@
 package com.ycbjie.slide;
 
+import ohos.agp.animation.Animator;
+import ohos.agp.animation.AnimatorValue;
+import ohos.agp.components.*;
+import ohos.agp.utils.Color;
+import ohos.app.Context;
+import ohos.eventhandler.EventHandler;
+import ohos.eventhandler.EventRunner;
+import ohos.multimodalinput.event.MmiPoint;
+import ohos.multimodalinput.event.TouchEvent;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.v4.view.ViewCompat;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+public class SlideLayout extends ComponentContainer implements Component.EstimateSizeListener,
+        ComponentContainer.ArrangeListener, Component.TouchEventListener {
 
-/**
- * <pre>
- *     @author yangchong
- *     blog  : https://github.com/yangchong211/YCShopDetailLayout
- *     time  : 2018/6/6
- *     desc  : SlideLayout
- *     revise:
- * </pre>
- */
-public class SlideLayout extends ViewGroup {
-
-
+    public static final String TAG = SlideLayout.class.getCanonicalName();
+    private static final String PERCENT = "percent";
+    private static final String DURATION = "duration";
     private static final float DEFAULT_PERCENT = 0.2f;
     private static final int DEFAULT_DURATION = 300;
 
-    private View mFrontView;
-    private View mBehindView;
-    private View mTarget;
+    private Component mFrontView;
+    private Component mBehindView;
+    private Component mTarget;
     private float mTouchSlop;
     private float mInitMotionY;
     private float mInitMotionX;
@@ -47,6 +31,8 @@ public class SlideLayout extends ViewGroup {
     private float mPercent = DEFAULT_PERCENT;
     private long mDuration = DEFAULT_DURATION;
     private int mDefaultPanel = 0;
+    private EventHandler mEventHandler = new EventHandler(EventRunner.getMainEventRunner());
+
 
     /**
      * 状态，使用枚举
@@ -69,79 +55,57 @@ public class SlideLayout extends ViewGroup {
         this(context, null);
     }
 
-    public SlideLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public SlideLayout(Context context, AttrSet attrSet) {
+        super(context, attrSet);
+
+        if (attrSet != null) {
+            mPercent = attrSet.getAttr(PERCENT).isPresent() ? attrSet.getAttr(
+                    PERCENT).get().getDimensionValue() : DEFAULT_PERCENT;
+            mDuration = attrSet.getAttr(DURATION).isPresent() ? attrSet.getAttr(
+                    DURATION).get().getIntegerValue() : DEFAULT_DURATION;
+        }
+
+        //TODO : API unavailable
+        //mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        mTouchSlop = 24;
+
+        setEstimateSizeListener(this);
+        setArrangeListener(this);
+        setTouchEventListener(this);
+        setLayoutRefreshedListener(component -> onFinishInflate());
     }
 
-    public SlideLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SlideLayout, defStyleAttr, 0);
-        mPercent = a.getFloat(R.styleable.SlideLayout_percent, DEFAULT_PERCENT);
-        mDuration = a.getInt(R.styleable.SlideLayout_duration, DEFAULT_DURATION);
-        mDefaultPanel = a.getInt(R.styleable.SlideLayout_default_panel, 0);
-        a.recycle();
-        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    private void onFinishInflate() {
         final int childCount = getChildCount();
         if (1 >= childCount) {
             throw new RuntimeException("SlideDetailsLayout only accept child more than 1!!");
         }
-        mFrontView = getChildAt(0);
-        mBehindView = getChildAt(1);
+        mFrontView = getComponentAt(0);
+        mBehindView = getComponentAt(1);
         if(mDefaultPanel == 1){
-            this.post(new Runnable() {
-                @Override
-                public void run() {
-                    smoothOpen(false);
-                }
-            });
+            mEventHandler.postTask(() -> smoothOpen(false));
         }
     }
 
-    /**
-     * 测量
-     */
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        final int pWidth = MeasureSpec.getSize(widthMeasureSpec);
-        final int pHeight = MeasureSpec.getSize(heightMeasureSpec);
-        final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(pWidth, MeasureSpec.EXACTLY);
-        final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(pHeight, MeasureSpec.EXACTLY);
-        View child;
-        for (int i = 0; i < getChildCount(); i++) {
-            child = getChildAt(i);
-            if (child.getVisibility() == GONE) {
-                continue;
-            }
-            measureChild(child, childWidthMeasureSpec, childHeightMeasureSpec);
-        }
-        setMeasuredDimension(pWidth, pHeight);
+    public boolean onEstimateSize(int widthEstimateConfig, int heightEstimateConfig) {
+        final int pWidth =  EstimateSpec.getSize(widthEstimateConfig);
+        final int pHeight = EstimateSpec.getSize(heightEstimateConfig);
+        int childWidthMeasureSpec = EstimateSpec.getSizeWithMode(pWidth, EstimateSpec.PRECISE);
+        int childHeightMeasureSpec = EstimateSpec.getSizeWithMode(pHeight, EstimateSpec.PRECISE);
+        setEstimatedSize(childWidthMeasureSpec, childHeightMeasureSpec);
+        return true;
     }
 
-    /**
-     * 绘制
-     */
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
-
-    /**
-     * 布局
-     */
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    public boolean onArrange(int l, int t, int r, int b) {
         int top;
         int bottom;
         final int offset = (int) mSlideOffset;
-        View child;
+        Component child;
         for (int i = 0; i < getChildCount(); i++) {
-            child = getChildAt(i);
-            if (child.getVisibility() == GONE) {
+            child = getComponentAt(i);
+            if (child.getVisibility() == INVISIBLE) {
                 continue;
             }
             if (child == mBehindView) {
@@ -151,17 +115,13 @@ public class SlideLayout extends ViewGroup {
                 top = t + offset;
                 bottom = b + offset;
             }
-            child.layout(l, top, r, bottom);
+            child.setComponentPosition(l, top, r, bottom);
         }
+        return true;
     }
 
-    /**
-     * 拦截事件
-     * @param ev                        ev
-     * @return
-     */
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    //TODO : API unavailable
+   /* public boolean onInterceptTouchEvent(MotionEvent ev) {
         ensureTarget();
         if (null == mTarget) {
             return false;
@@ -203,15 +163,10 @@ public class SlideLayout extends ViewGroup {
                 break;
         }
         return shouldIntercept;
-    }
+    }*/
 
-    /**
-     * 触摸事件
-     * @param ev                            ev
-     * @return                              true表示自己处理，false表示自己处理不了
-     */
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(Component component, TouchEvent event) {
         ensureTarget();
         if (null == mTarget) {
             return false;
@@ -220,15 +175,18 @@ public class SlideLayout extends ViewGroup {
             return false;
         }
         boolean wantTouch = true;
-        final int action = ev.getAction();
+        final int action = event.getAction();
+        int actionIndex = event.getIndex();
+        int index = event.getPointerId(actionIndex);
+        MmiPoint point1 = event.getPointerPosition(index);
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (mTarget instanceof View) {
+            case TouchEvent.PRIMARY_POINT_DOWN:
+                if (mTarget instanceof Component) {
                     wantTouch = true;
                 }
                 break;
-            case MotionEvent.ACTION_MOVE:
-                final float y = ev.getY();
+            case TouchEvent.POINT_MOVE:
+                final float y = point1.getY();
                 final float yDiff = y - mInitMotionY;
                 if (canChildScrollVertically(((int) yDiff))) {
                     wantTouch = false;
@@ -237,8 +195,8 @@ public class SlideLayout extends ViewGroup {
                     wantTouch = true;
                 }
                 break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
+            case TouchEvent.PRIMARY_POINT_UP:
+            case TouchEvent.CANCEL:
                 finishTouchEvent();
                 wantTouch = false;
                 break;
@@ -247,7 +205,6 @@ public class SlideLayout extends ViewGroup {
         }
         return wantTouch;
     }
-
 
     private void processTouchEvent(final float offset) {
         if (Math.abs(offset) < mTouchSlop) {
@@ -264,7 +221,7 @@ public class SlideLayout extends ViewGroup {
                 return;
             }
         } else if (mStatus == Status.OPEN) {
-            final float pHeight = -getMeasuredHeight();
+            final float pHeight = -getEstimatedHeight();
             if (offset <= 0) {
                 mSlideOffset = pHeight;
             } else {
@@ -275,12 +232,12 @@ public class SlideLayout extends ViewGroup {
                 return;
             }
         }
-        requestLayout();
+        postLayout();
     }
 
 
     private void finishTouchEvent() {
-        final int pHeight = getMeasuredHeight();
+        final int pHeight = getEstimatedHeight();
         final int percent = (int) (pHeight * mPercent);
         final float offset = mSlideOffset;
         boolean changed = false;
@@ -304,24 +261,37 @@ public class SlideLayout extends ViewGroup {
         animatorSwitch(offset, mSlideOffset, changed);
     }
 
-
     private void animatorSwitch(final float start, final float end, final boolean changed) {
         animatorSwitch(start, end, changed, mDuration);
     }
 
     private void animatorSwitch(final float start, final float end, final boolean changed, final long duration) {
+        float[] values = {start, end};
         ValueAnimator animator = ValueAnimator.ofFloat(start, end);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mSlideOffset = (float) animation.getAnimatedValue();
-                requestLayout();
-            }
+
+        animator.setValueUpdateListener((animatorValue, v) -> {
+            mSlideOffset = (float) AnimatorValueUtils.getAnimatedValue(v, values);
+            postLayout();
         });
-        animator.addListener(new AnimatorListenerAdapter() {
+
+        animator.setStateChangedListener(new Animator.StateChangedListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
+            public void onStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onStop(Animator animator) {
+
+            }
+
+            @Override
+            public void onCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onEnd(Animator animator) {
                 if (changed) {
                     if (mStatus == Status.OPEN) {
                         checkAndFirstOpenPanel();
@@ -332,7 +302,19 @@ public class SlideLayout extends ViewGroup {
                     }
                 }
             }
+
+            @Override
+            public void onPause(Animator animator) {
+
+            }
+
+            @Override
+            public void onResume(Animator animator) {
+
+            }
         });
+
+
         animator.setDuration(duration);
         animator.start();
     }
@@ -352,91 +334,33 @@ public class SlideLayout extends ViewGroup {
         }
     }
 
-
-
     protected boolean canChildScrollVertically(int direction) {
-        if (mTarget instanceof AbsListView) {
-            return canListViewScroll((AbsListView) mTarget);
-        } else if (mTarget instanceof FrameLayout || mTarget instanceof RelativeLayout ||
-                mTarget instanceof LinearLayout) {
-            View child;
-            for (int i = 0; i < ((ViewGroup) mTarget).getChildCount(); i++) {
-                child = ((ViewGroup) mTarget).getChildAt(i);
-                if (child instanceof AbsListView) {
-                    return canListViewScroll((AbsListView) child);
+        if (mTarget instanceof ListContainer) {
+            return canListViewScroll((ListContainer) mTarget);
+        } else if (mTarget instanceof StackLayout || mTarget instanceof DependentLayout ||
+                mTarget instanceof DirectionalLayout) {
+            Component child;
+            for (int i = 0; i < ((ComponentContainer) mTarget).getChildCount(); i++) {
+                child = ((ComponentContainer) mTarget).getComponentAt(i);
+                if (child instanceof ListContainer) {
+                    return canListViewScroll((ListContainer) child);
                 }
             }
         }
-        return ViewCompat.canScrollVertically(mTarget, -direction);
+        return mTarget.canScroll(- direction);
     }
 
-    protected boolean canListViewScroll(AbsListView absListView) {
+    protected boolean canListViewScroll(ListContainer absListView) {
         if (mStatus == Status.OPEN) {
             return absListView.getChildCount() > 0
-                    && (absListView.getFirstVisiblePosition() > 0
-                    || absListView.getChildAt(0).getTop() < absListView.getPaddingTop());
+                    && (absListView.getFirstVisibleItemPosition() > 0
+                    || absListView.getComponentAt(0).getTop() < absListView.getPaddingTop());
         } else {
             final int count = absListView.getChildCount();
             return count > 0
-                    && (absListView.getLastVisiblePosition() < count - 1
-                    || absListView.getChildAt(count - 1).getBottom() > absListView.getMeasuredHeight());
+                    && (absListView.getLastVisibleItemPosition() < count - 1
+                    || absListView.getComponentAt(count - 1).getBottom() > absListView.getEstimatedHeight());
         }
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        SavedState ss = new SavedState(super.onSaveInstanceState());
-        ss.offset = mSlideOffset;
-        ss.status = mStatus.ordinal();
-        return ss;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        mSlideOffset = ss.offset;
-        mStatus = Status.valueOf(ss.status);
-        if (mStatus == Status.OPEN) {
-            mBehindView.setVisibility(VISIBLE);
-        }
-        requestLayout();
-    }
-
-    static class SavedState extends BaseSavedState {
-
-        private float offset;
-        private int status;
-
-        SavedState(Parcel source) {
-            super(source);
-            offset = source.readFloat();
-            status = source.readInt();
-        }
-
-        SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeFloat(offset);
-            out.writeInt(status);
-        }
-
-        public static final Creator<SavedState> CREATOR =
-                new Creator<SavedState>() {
-                    @Override
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-
-                    @Override
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
     }
 
     /*------------------------------------回调接口------------------------------------------------*/
@@ -453,7 +377,7 @@ public class SlideLayout extends ViewGroup {
     public void smoothOpen(boolean smooth) {
         if (mStatus != Status.OPEN) {
             mStatus = Status.OPEN;
-            final float height = -getMeasuredHeight();
+            final float height = -getEstimatedWidth();
             animatorSwitch(0, height, true, smooth ? mDuration : 0);
         }
     }
@@ -462,7 +386,7 @@ public class SlideLayout extends ViewGroup {
     public void smoothClose(boolean smooth) {
         if (mStatus != Status.CLOSE) {
             mStatus = Status.CLOSE;
-            final float height = -getMeasuredHeight();
+            final float height = -getEstimatedHeight();
             animatorSwitch(height, 0, true, smooth ? mDuration : 0);
         }
     }
@@ -470,5 +394,4 @@ public class SlideLayout extends ViewGroup {
     public void setPercent(float percent) {
         this.mPercent = percent;
     }
-
 }

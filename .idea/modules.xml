@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/YCShopDetailLayout-master.iml" filepath="$PROJECT_DIR$/.idea/YCShopDetailLayout-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/YCShopDetailLayout.iml" filepath="$PROJECT_DIR$/.idea/modules/YCShopDetailLayout.iml" group="YCShopDetailLayout" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/YCSlideLib/YCSlideLib.iml" filepath="$PROJECT_DIR$/.idea/modules/YCSlideLib/YCSlideLib.iml" group="YCShopDetailLayout/YCSlideLib" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/entry/entry.iml" filepath="$PROJECT_DIR$/.idea/modules/entry/entry.iml" group="YCShopDetailLayout/entry" />
     </modules>
   </component>
 </project>
