@@ -40,6 +40,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     public enum Status {
         CLOSE,
         OPEN;
+
         public static Status valueOf(int stats) {
             if (0 == stats) {
                 return CLOSE;
@@ -82,14 +83,14 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
         }
         mFrontView = getComponentAt(0);
         mBehindView = getComponentAt(1);
-        if(mDefaultPanel == 1){
+        if (mDefaultPanel == 1) {
             mEventHandler.postTask(() -> smoothOpen(false));
         }
     }
 
     @Override
     public boolean onEstimateSize(int widthEstimateConfig, int heightEstimateConfig) {
-        final int pWidth =  EstimateSpec.getSize(widthEstimateConfig);
+        final int pWidth = EstimateSpec.getSize(widthEstimateConfig);
         final int pHeight = EstimateSpec.getSize(heightEstimateConfig);
         int childWidthMeasureSpec = EstimateSpec.getSizeWithMode(pWidth, EstimateSpec.PRECISE);
         int childHeightMeasureSpec = EstimateSpec.getSizeWithMode(pHeight, EstimateSpec.PRECISE);
@@ -347,7 +348,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
                 }
             }
         }
-        return mTarget.canScroll(- direction);
+        return mTarget.canScroll(-direction);
     }
 
     protected boolean canListViewScroll(ListContainer absListView) {
@@ -365,9 +366,11 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
 
     /*------------------------------------回调接口------------------------------------------------*/
     private OnSlideDetailsListener mOnSlideDetailsListener;
+
     public interface OnSlideDetailsListener {
         void onStatusChanged(Status status);
     }
+
     public void setOnSlideDetailsListener(OnSlideDetailsListener listener) {
         this.mOnSlideDetailsListener = listener;
     }
