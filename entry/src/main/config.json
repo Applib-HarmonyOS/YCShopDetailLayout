@@ -14,7 +14,8 @@
     "mainAbility": "com.ycbjie.ycshopdetaillayout.MainAbility",
     "deviceType": [
       "phone",
-      "tablet"
+      "tablet",
+      "tv"
     ],
     "distro": {
       "deliveryWithInstall": true,
@@ -41,6 +42,20 @@
         "label": "$string:entry_MainAbility",
         "type": "page",
         "launchType": "standard"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.first"
+            ]
+          }
+        ],
+        "orientation": "unspecified",
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.first.FirstAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
       }
     ]
   }

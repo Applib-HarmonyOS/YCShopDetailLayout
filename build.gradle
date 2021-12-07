@@ -5,12 +5,23 @@ apply plugin: 'checkstyle'
 
 //For instructions on signature configuration, see https://developer.harmonyos.com/en/docs/documentation/doc-guides/ide_debug_device-0000001053822404#EN-US_TOPIC_0000001154985555__section1112183053510
 ohos {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\admin\\.ohos\\config\\auto_debug_2640091000002771297.p12')
+            storePassword '00000018933A7AFD804013F6AD4FF0A4DABBE6E478238F037DC7C6D81D8E6005F26BBF3D6DE3E9CC'
+            keyAlias = 'debugKey'
+            keyPassword '00000018BEF2E528CDF3A793251F1538D051B7E2F83AC7E28B528C0568F0DA4FA633A636D35D4622'
+            signAlg = 'SHA256withECDSA'
+            profile file('C:\\Users\\admin\\.ohos\\config\\auto_debug_ycshopdetaillayout_2640091000002771297.p7b')
+            certpath file('C:\\Users\\admin\\.ohos\\config\\auto_debug_2640091000002771297.cer')
+        }
+    }
     compileSdkVersion 5
     defaultConfig {
         compatibleSdkVersion 5
     }
 }
-	
+
 buildscript {
     repositories {
         maven {
@@ -19,7 +30,7 @@ buildscript {
         maven {
             url 'https://developer.huawei.com/repo/'
         }
-		jcenter()
+        jcenter()
     }
     dependencies {
         classpath 'com.huawei.ohos:hap:2.4.4.2'
@@ -36,7 +47,7 @@ allprojects {
         maven {
             url 'https://developer.huawei.com/repo/'
         }
-		jcenter()
+        jcenter()
     }
 
     task checkstyle(type: Checkstyle) {

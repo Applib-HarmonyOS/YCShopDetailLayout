@@ -1,20 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<DependentLayout
+<DirectionalLayout
     xmlns:ohos="http://schemas.huawei.com/res/ohos"
     ohos:height="match_parent"
     ohos:width="match_parent"
     ohos:alignment="center"
-    ohos:orientation="vertical">
+    ohos:background_element="#d3d3d3"
+    ohos:orientation="vertical"
+    ohos:padding="10vp">
 
     <Text
-        ohos:id="$+id:text_helloworld"
+        ohos:id="$+id:tv_1"
         ohos:height="match_content"
-        ohos:width="match_content"
+        ohos:width="match_parent"
         ohos:background_element="$graphic:background_ability_main"
-        ohos:layout_alignment="horizontal_center"
-        ohos:text="$string:mainability_HelloWorld"
-        ohos:below="$string:mainability_description"
-        ohos:text_size="40vp"
+        ohos:padding="10vp"
+        ohos:text="购物车商品详情页面"
+        ohos:text_color="#000000"
+        ohos:text_size="20fp"
         />
 
-</DependentLayout>:q
+    <Text
+        ohos:id="$+id:tv_2"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:background_element="$graphic:background_ability_main"
+        ohos:padding="10vp"
+        ohos:text="购物车商品详情页面，带有动画"
+        ohos:text_color="#000000"
+        ohos:text_size="20fp"
+        ohos:top_margin="20vp"
+        />
+
+    <Text
+        ohos:id="$+id:tv_3"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:background_element="$graphic:background_ability_main"
+        ohos:padding="10vp"
+        ohos:text="仿天猫商品详情页面"
+        ohos:text_color="#000000"
+        ohos:text_size="20fp"
+        ohos:top_margin="20vp"
+        />
+
+    <Text
+        ohos:id="$+id:tv_4"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:background_element="$graphic:background_ability_main"
+        ohos:padding="10vp"
+        ohos:text="购物车商品详情页面，带有动画，待点击滑动"
+        ohos:text_color="#000000"
+        ohos:text_size="20fp"
+        ohos:top_margin="20vp"
+        />
+
+    <Text
+        ohos:id="$+id:tv_5"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:background_element="$graphic:background_ability_main"
+        ohos:padding="10vp"
+        ohos:text="scrollView滚动到顶部"
+        ohos:text_color="#000000"
+        ohos:text_size="20fp"
+        ohos:top_margin="20vp"
+        />
+
+
+</DirectionalLayout>

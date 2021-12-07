@@ -1,9 +1,7 @@
 package com.ycbjie.slide;
 
 import ohos.agp.animation.Animator;
-import ohos.agp.animation.AnimatorValue;
 import ohos.agp.components.*;
-import ohos.agp.utils.Color;
 import ohos.app.Context;
 import ohos.eventhandler.EventHandler;
 import ohos.eventhandler.EventRunner;
@@ -16,6 +14,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     public static final String TAG = SlideLayout.class.getCanonicalName();
     private static final String PERCENT = "percent";
     private static final String DURATION = "duration";
+    private static final String DEFAULT_PANEL = "default_panel";
     private static final float DEFAULT_PERCENT = 0.2f;
     private static final int DEFAULT_DURATION = 300;
 
@@ -59,11 +58,15 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     public SlideLayout(Context context, AttrSet attrSet) {
         super(context, attrSet);
 
+        LogUtil.debug("Gowtham", "Inside Constructor : ");
+
         if (attrSet != null) {
             mPercent = attrSet.getAttr(PERCENT).isPresent() ? attrSet.getAttr(
                     PERCENT).get().getDimensionValue() : DEFAULT_PERCENT;
             mDuration = attrSet.getAttr(DURATION).isPresent() ? attrSet.getAttr(
                     DURATION).get().getIntegerValue() : DEFAULT_DURATION;
+            mDefaultPanel = attrSet.getAttr(DEFAULT_PANEL).isPresent() ? attrSet.getAttr(
+                    DEFAULT_PANEL).get().getIntegerValue() : 0;
         }
 
         //TODO : API unavailable
@@ -84,9 +87,13 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
         mFrontView = getComponentAt(0);
         mBehindView = getComponentAt(1);
         if (mDefaultPanel == 1) {
+            LogUtil.debug("Gowtham", "onFinishInflate smoothOpen: ");
             mEventHandler.postTask(() -> smoothOpen(false));
         }
+
     }
+
+
 
     @Override
     public boolean onEstimateSize(int widthEstimateConfig, int heightEstimateConfig) {
@@ -94,7 +101,16 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
         final int pHeight = EstimateSpec.getSize(heightEstimateConfig);
         int childWidthMeasureSpec = EstimateSpec.getSizeWithMode(pWidth, EstimateSpec.PRECISE);
         int childHeightMeasureSpec = EstimateSpec.getSizeWithMode(pHeight, EstimateSpec.PRECISE);
+        Component child;
+        for (int i = 0; i < getChildCount(); i++) {
+            child = getComponentAt(i);
+            if (child.getVisibility() == INVISIBLE) {
+                continue;
+            }
+            child.estimateSize(childWidthMeasureSpec, childHeightMeasureSpec);
+        }
         setEstimatedSize(childWidthMeasureSpec, childHeightMeasureSpec);
+        LogUtil.debug("Gowtham", "onMeasure : " + pWidth +" : " + pHeight );
         return true;
     }
 
@@ -116,13 +132,15 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
                 top = t + offset;
                 bottom = b + offset;
             }
-            child.setComponentPosition(l, top, r, bottom);
+            LogUtil.debug("Gowtham", "onLayout : " + l + " : " + top + " : " + r + " : " + bottom);
+            child.arrange(l, top, r, bottom);
         }
         return true;
     }
 
     //TODO : API unavailable
    /* public boolean onInterceptTouchEvent(MotionEvent ev) {
+   LogUtil.debug("Gowtham", "onInterceptTouchEvent : ");
         ensureTarget();
         if (null == mTarget) {
             return false;
@@ -168,6 +186,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
 
     @Override
     public boolean onTouchEvent(Component component, TouchEvent event) {
+        LogUtil.debug("Gowtham", "onTouchEvent : ");
         ensureTarget();
         if (null == mTarget) {
             return false;
@@ -204,10 +223,13 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
             default:
                 break;
         }
+
+        LogUtil.debug("Gowtham", "WantTouch : " + wantTouch);
         return wantTouch;
     }
 
     private void processTouchEvent(final float offset) {
+        LogUtil.debug("Gowtham", "processTouchEvent : ");
         if (Math.abs(offset) < mTouchSlop) {
             return;
         }
@@ -238,6 +260,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
 
 
     private void finishTouchEvent() {
+        LogUtil.debug("Gowtham", "finishTouchEvent : ");
         final int pHeight = getEstimatedHeight();
         final int percent = (int) (pHeight * mPercent);
         final float offset = mSlideOffset;
@@ -267,11 +290,12 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     }
 
     private void animatorSwitch(final float start, final float end, final boolean changed, final long duration) {
-        float[] values = {start, end};
+        LogUtil.debug("Gowtham", "animatorSwitch : ");
         ValueAnimator animator = ValueAnimator.ofFloat(start, end);
 
         animator.setValueUpdateListener((animatorValue, v) -> {
-            mSlideOffset = (float) AnimatorValueUtils.getAnimatedValue(v, values);
+            mSlideOffset = v;
+            LogUtil.debug("Gowtham", "animatorSwitch mSlideOffset: start : " + start +" : " + end +" : " + v +" : "+ mSlideOffset);
             postLayout();
         });
 
@@ -321,6 +345,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     }
 
     private void checkAndFirstOpenPanel() {
+        LogUtil.debug("Gowtham", "checkAndFirstOpenPanel : " );
         if (isFirstShowBehindView) {
             isFirstShowBehindView = false;
             mBehindView.setVisibility(VISIBLE);
@@ -328,6 +353,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     }
 
     private void ensureTarget() {
+        LogUtil.debug("Gowtham", "ensureTarget : ");
         if (mStatus == Status.CLOSE) {
             mTarget = mFrontView;
         } else {
@@ -336,6 +362,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     }
 
     protected boolean canChildScrollVertically(int direction) {
+        LogUtil.debug("Gowtham", "canChildscrollVertically : ");
         if (mTarget instanceof ListContainer) {
             return canListViewScroll((ListContainer) mTarget);
         } else if (mTarget instanceof StackLayout || mTarget instanceof DependentLayout ||
@@ -352,6 +379,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
     }
 
     protected boolean canListViewScroll(ListContainer absListView) {
+        LogUtil.debug("Gowtham", "canListViewScroll : ");
         if (mStatus == Status.OPEN) {
             return absListView.getChildCount() > 0
                     && (absListView.getFirstVisibleItemPosition() > 0
@@ -381,6 +409,7 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
         if (mStatus != Status.OPEN) {
             mStatus = Status.OPEN;
             final float height = -getEstimatedWidth();
+            LogUtil.debug("Gowtham", "smoothOpen -getEstimatedWidth: " + height);
             animatorSwitch(0, height, true, smooth ? mDuration : 0);
         }
     }

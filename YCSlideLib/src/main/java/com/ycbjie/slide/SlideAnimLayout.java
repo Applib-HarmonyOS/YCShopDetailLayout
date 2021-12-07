@@ -149,6 +149,24 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         final int pHeight = EstimateSpec.getSize(heightEstimateConfig);
         int childWidthMeasureSpec = EstimateSpec.getSizeWithMode(pWidth, EstimateSpec.PRECISE);
         int childHeightMeasureSpec = EstimateSpec.getSizeWithMode(pHeight, EstimateSpec.PRECISE);
+        Component child;
+        for (int i = 0; i < getChildCount(); i++) {
+            child = getComponentAt(i);
+            //当控件是Gone的时候，不进行测量
+            if (child.getVisibility() == Component.INVISIBLE) {
+                continue;
+            }
+            //当孩子控件是动画控件时，则特殊处理
+            if(getComponentAt(i) == mAnimView){
+                child.estimateSize(0,0);
+                int measuredHeight = child.getEstimatedHeight();
+                int makeMeasureSpec = EstimateSpec.getSizeWithMode(measuredHeight, EstimateSpec.PRECISE);
+                LogUtil.info("onMeasure获取控件高度",""+measuredHeight);
+                child.estimateSize(childWidthMeasureSpec, makeMeasureSpec);
+            } else{
+                child.estimateSize(childWidthMeasureSpec, childHeightMeasureSpec);
+            }
+        }
         setEstimatedSize(childWidthMeasureSpec, childHeightMeasureSpec);
         return true;
     }
@@ -179,7 +197,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
                 bottom = b + offset;
                 LoggerUtils.i("onLayout，other---",""+top+"-----"+bottom);
             }
-            child.setComponentPosition(l, top, r, bottom);
+            child.arrange(l, top, r, bottom);
         }
         return true;
     }
@@ -368,11 +386,10 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
     private void animatorSwitch(final float start, final float end,
                                 final boolean changed, final long duration) {
-        float[] values = {start, end};
         animator = ValueAnimator.ofFloat(start, end);
 
         animator.setValueUpdateListener((animatorValue, v) -> {
-            mSlideOffset = (float) AnimatorValueUtils.getAnimatedValue(v, values);
+            mSlideOffset = v;
             postLayout();
         });
 
