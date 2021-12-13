@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DirectionalLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    xmlns:custom="http://schemas.huawei.com/res/custom"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:orientation="vertical">
+
+    <com.ycbjie.slide.SlideLayout
+        ohos:id="$+id:slideDetailsLayout"
+        ohos:height="match_parent"
+        ohos:width="match_parent"
+        custom:default_panel="0"
+        custom:duration="200"
+        custom:percent="0.1">
+
+        <StackLayout
+            ohos:id="$+id:fl_shop_main"
+            ohos:height="match_parent"
+            ohos:width="match_parent"/>
+
+        <include
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:layout="$layout:include_shop_detail3"/>
+
+    </com.ycbjie.slide.SlideLayout>
+
+</DirectionalLayout>

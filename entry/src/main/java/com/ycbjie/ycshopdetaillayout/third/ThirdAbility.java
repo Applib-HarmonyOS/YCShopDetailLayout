@@ -1,8 +1,9 @@
-package com.ycbjie.ycshopdetaillayout.first;
+package com.ycbjie.ycshopdetaillayout.third;
 
 import com.ycbjie.slide.LogUtil;
 import com.ycbjie.slide.SlideLayout;
 import com.ycbjie.ycshopdetaillayout.ResourceTable;
+import com.ycbjie.ycshopdetaillayout.first.ShopMainFragment;
 import ohos.aafwk.ability.fraction.FractionAbility;
 import ohos.aafwk.ability.fraction.FractionManager;
 import ohos.aafwk.ability.fraction.FractionScheduler;
@@ -12,7 +13,7 @@ import ohos.agp.components.webengine.WebAgent;
 import ohos.agp.components.webengine.WebConfig;
 import ohos.agp.components.webengine.WebView;
 
-public class FirstAbility extends FractionAbility {
+public class ThirdAbility extends FractionAbility {
 
     private SlideLayout mSlideDetailsLayout;
     private ShopMainFragment shopMainFragment;
@@ -21,7 +22,7 @@ public class FirstAbility extends FractionAbility {
     @Override
     public void onStart(Intent intent) {
         super.onStart(intent);
-        super.setUIContent(ResourceTable.Layout_ability_first);
+        super.setUIContent(ResourceTable.Layout_ability_third);
         initView();
         initShopMainFragment();
         initSlideDetailsLayout();
@@ -53,11 +54,11 @@ public class FirstAbility extends FractionAbility {
             public void onStatusChanged(SlideLayout.Status status) {
                 if (status == SlideLayout.Status.OPEN) {
                     //当前为图文详情页
-                    LogUtil.error("FirstAbility","下拉回到商品详情");
+                    LogUtil.error("ThirdAbility","下拉回到商品详情");
                     shopMainFragment.changBottomView(true);
                 } else {
                     //当前为商品详情页
-                    LogUtil.error("FirstAbility","继续上拉，查看图文详情");
+                    LogUtil.error("ThirdAbility","继续上拉，查看图文详情");
                     shopMainFragment.changBottomView(false);
                 }
             }
@@ -87,6 +88,5 @@ public class FirstAbility extends FractionAbility {
             });
         }
     }
-
 
 }

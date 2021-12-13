@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent">
+
+    <DirectionalLayout
+        xmlns:ohos="http://schemas.huawei.com/res/ohos"
+        ohos:id="$+id:ll_detail"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:orientation="vertical">
+
+        <Text
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:padding="10vp"
+            ohos:text="这个是详情页面"/>
+
+        <DirectionalLayout
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:bottom_margin="15vp"
+            ohos:orientation="horizontal"
+            ohos:top_margin="17vp">
+
+            <DirectionalLayout
+                ohos:height="match_content"
+                ohos:width="match_content"
+                ohos:layout_alignment="horizontal_center"
+                ohos:orientation="vertical"
+                ohos:weight="1">
+
+                <Image
+                    ohos:height="44vp"
+                    ohos:width="44vp"
+                    ohos:image_src="$media:icon_detail_page_one_to_ten"/>
+
+                <Text
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:text="假一赔十"
+                    ohos:text_color="#000000"
+                    ohos:text_size="12fp"
+                    ohos:top_margin="5vp"/>
+
+            </DirectionalLayout>
+
+            <DirectionalLayout
+                ohos:height="match_content"
+                ohos:width="match_content"
+                ohos:layout_alignment="horizontal_center"
+                ohos:orientation="vertical"
+                ohos:weight="1">
+
+                <Image
+                    ohos:height="44vp"
+                    ohos:width="44vp"
+                    ohos:image_src="$media:icon_detail_page_100_true"/>
+
+                <Text
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:text="100%正品"
+                    ohos:text_color="#000000"
+                    ohos:text_size="12fp"
+                    ohos:top_margin="5vp"/>
+
+            </DirectionalLayout>
+
+            <DirectionalLayout
+                ohos:height="match_content"
+                ohos:width="match_content"
+                ohos:layout_alignment="horizontal_center"
+                ohos:orientation="vertical"
+                ohos:weight="1">
+
+                <Image
+                    ohos:height="44vp"
+                    ohos:width="44vp"
+                    ohos:image_src="$media:icon_detail_page_network_payment"/>
+
+                <Text
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:text="平台担保"
+                    ohos:text_color="#000000"
+                    ohos:text_size="12fp"
+                    ohos:top_margin="5vp"/>
+
+            </DirectionalLayout>
+
+            <DirectionalLayout
+                ohos:height="match_content"
+                ohos:width="match_content"
+                ohos:layout_alignment="horizontal_center"
+                ohos:orientation="vertical"
+                ohos:weight="1">
+
+                <Image
+                    ohos:height="44vp"
+                    ohos:width="44vp"
+                    ohos:image_src="$media:icon_detail_page"/>
+
+                <Text
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:text="售后无忧"
+                    ohos:text_color="#000000"
+                    ohos:text_size="12fp"
+                    ohos:top_margin="5vp"/>
+
+            </DirectionalLayout>
+
+        </DirectionalLayout>
+
+        <com.ycbjie.ycshopdetaillayout.third.NoScrollWebView
+            ohos:id="$+id:wb_view"
+            ohos:height="match_parent"
+            ohos:width="match_parent"/>
+
+    </DirectionalLayout>
+
+</ScrollView>

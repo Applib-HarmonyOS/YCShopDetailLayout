@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DirectionalLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    xmlns:custom="http://schemas.huawei.com/res/custom"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:orientation="vertical">
+
+    <Button
+        ohos:id="$+id:btn"
+        ohos:height="match_content"
+        ohos:width="match_parent"
+        ohos:text="切换状态"
+        ohos:visibility="hide"/>
+
+    <com.ycbjie.slide.SlideAnimLayout
+        ohos:id="$+id:slideDetailsLayout"
+        ohos:height="0vp"
+        ohos:width="match_parent"
+        ohos:weight="1"
+        custom:default_panel="0"
+        custom:duration="200"
+        custom:percent="0.1">
+
+        <StackLayout
+            ohos:id="$+id:fl_shop_main2"
+            ohos:height="match_parent"
+            ohos:width="match_parent"/>
+
+        <DirectionalLayout
+            ohos:id="$+id:ll_page_more"
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:orientation="vertical">
+
+            <Image
+                ohos:id="$+id:iv_more_img"
+                ohos:height="40vp"
+                ohos:width="40vp"
+                ohos:image_src="$media:icon_details_page_down_loading"
+                ohos:layout_alignment="horizontal_center"
+                ohos:rotate="180"
+                />
+
+            <Text
+                ohos:id="$+id:tv_more_text"
+                ohos:height="match_content"
+                ohos:width="match_content"
+                ohos:bottom_margin="25vp"
+                ohos:layout_alignment="horizontal_center"
+                ohos:text="测试动画，继续上拉，查看图文详情"
+                ohos:text_alignment="center"
+                ohos:text_size="13fp"
+                />
+
+        </DirectionalLayout>
+
+        <include
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:layout="$layout:include_shop_detail"/>
+
+    </com.ycbjie.slide.SlideAnimLayout>
+
+</DirectionalLayout>
