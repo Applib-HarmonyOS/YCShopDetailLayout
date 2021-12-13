@@ -30,5 +30,19 @@ public class MainAbility extends Ability {
             intent1.setOperation(operation);
             startAbility(intent1);
         });
+
+        findComponentById(ResourceTable.Id_tv_4).setClickedListener(component -> {
+            Intent intent1 = new Intent();
+            Operation operation = new Intent.OperationBuilder().withAction("action.four").build();
+            intent1.setOperation(operation);
+            startAbility(intent1);
+        });
+
+        findComponentById(ResourceTable.Id_tv_5).setClickedListener(component -> {
+            Intent intent1 = new Intent();
+            Operation operation = new Intent.OperationBuilder().withAction("action.five").build();
+            intent1.setOperation(operation);
+            startAbility(intent1);
+        });
     }
 }

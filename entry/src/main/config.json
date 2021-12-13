@@ -87,6 +87,32 @@
         "name": "com.ycbjie.ycshopdetaillayout.third.ThirdAbility",
         "description": "$string:mainability_description",
         "type": "page"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.four"
+            ]
+          }
+        ],
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.four.FourAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.five"
+            ]
+          }
+        ],
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.five.FiveAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
       }
     ]
   }
