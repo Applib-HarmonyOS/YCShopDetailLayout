@@ -22,9 +22,10 @@ public class FiveAbility extends Ability {
                 getUITaskDispatcher().asyncDispatch(new Runnable() {
                     @Override
                     public void run() {
-                        nestedScrollView.fluentScrollByY(getWindow().getLayoutConfig().get().height);
                         //TODO : API unavailable
                         //nestedScrollView.fullScroll(ScrollView.FOCUS_UP);
+                        nestedScrollView.fluentScrollByY(getWindow().getLayoutConfig().get().height);
+
                     }
                 });
 

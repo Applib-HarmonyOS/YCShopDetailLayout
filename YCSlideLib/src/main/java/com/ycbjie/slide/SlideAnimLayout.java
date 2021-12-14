@@ -9,9 +9,20 @@ import ohos.multimodalinput.event.MmiPoint;
 import ohos.multimodalinput.event.TouchEvent;
 
 public class SlideAnimLayout extends ComponentContainer implements Component.BindStateChangedListener,
-        Component.EstimateSizeListener, ComponentContainer.ArrangeListener, Component.TouchEventListener {
+        Component.EstimateSizeListener, ComponentContainer.ArrangeListener, Component.TouchEventListener,
+        Component.LayoutRefreshedListener {
 
     private ValueAnimator animator;
+
+    @Override
+    public void onRefreshed(Component component) {
+        onFinishInflate();
+    }
+
+
+   /* public void onRefreshed(Component component) {
+        onFinishInflate();
+    }*/
 
     public enum Status {
         /**
@@ -61,6 +72,8 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
     public SlideAnimLayout(Context context, AttrSet attrSet) {
         super(context, attrSet);
 
+        LogUtil.debug("Gowtham", "Inside Constructor : ");
+
         if (attrSet != null) {
             mDuration = attrSet.getAttr(DURATION).isPresent() ? attrSet.getAttr(
                     DURATION).get().getIntegerValue() : DEFAULT_DURATION;
@@ -76,7 +89,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         setEstimateSizeListener(this);
         setArrangeListener(this);
         setTouchEventListener(this);
-        setLayoutRefreshedListener(component -> onFinishInflate());
+        setLayoutRefreshedListener(this);
     }
 
     /**
@@ -246,7 +259,6 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
     @Override
     public boolean onTouchEvent(Component component, TouchEvent event) {
-        ensureTarget();
         if (null == mTarget) {
             return false;
         }
