@@ -1,0 +1,119 @@
+{
+  "app": {
+    "bundleName": "com.ycbjie.ycshopdetaillayout",
+    "vendor": "ycbjie",
+    "version": {
+      "code": 1000000,
+      "name": "1.0.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "package": "com.ycbjie.ycshopdetaillayout",
+    "name": ".MyApplication",
+    "mainAbility": "com.ycbjie.ycshopdetaillayout.MainAbility",
+    "deviceType": [
+      "phone",
+      "tablet",
+      "tv"
+    ],
+    "reqPermissions": [
+      {
+        "name": "ohos.permission.INTERNET"
+      }
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "entry",
+      "moduleType": "entry",
+      "installationFree": false
+    },
+    "abilities": [
+      {
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ],
+        "orientation": "unspecified",
+        "name": "com.ycbjie.ycshopdetaillayout.MainAbility",
+        "icon": "$media:icon",
+        "description": "$string:mainability_description",
+        "label": "$string:entry_MainAbility",
+        "type": "page",
+        "launchType": "standard"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.first"
+            ]
+          }
+        ],
+        "orientation": "unspecified",
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.first.FirstAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.second"
+            ]
+          }
+        ],
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.second.SecondAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.third"
+            ]
+          }
+        ],
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.third.ThirdAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.four"
+            ]
+          }
+        ],
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.four.FourAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
+      },
+      {
+        "skills": [
+          {
+            "actions": [
+              "action.five"
+            ]
+          }
+        ],
+        "icon": "$media:icon",
+        "name": "com.ycbjie.ycshopdetaillayout.five.FiveAbility",
+        "description": "$string:mainability_description",
+        "type": "page"
+      }
+    ]
+  }
+}

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StackLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent">
+
+    <NestedScrollView
+        ohos:id="$+id:scrollView"
+        ohos:height="match_parent"
+        ohos:width="match_parent"
+        ohos:match_viewport="true"
+        ohos:orientation="vertical">
+
+        <DirectionalLayout
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:background_element="#eeeff3"
+            ohos:orientation="vertical">
+
+            <Image
+                ohos:height="200vp"
+                ohos:width="match_parent"/>
+
+            <Component
+                ohos:height="1vp"
+                ohos:width="match_parent"
+                ohos:alpha=".4"
+                ohos:background_element="#dddddd"/>
+
+            <DirectionalLayout
+                ohos:height="match_content"
+                ohos:width="match_parent"
+                ohos:background_element="#ffffff"
+                ohos:left_padding="12vp"
+                ohos:orientation="vertical"
+                ohos:top_padding="15vp">
+
+                <Text
+                    ohos:id="$+id:tv_goods_title"
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:max_text_lines="2"
+                    ohos:padding="10vp"
+                    ohos:right_margin="22vp"
+                    ohos:text="逗比，这个商品详情页面的商品标题"
+                    ohos:text_color="#222222"
+                    ohos:text_size="15fp"
+                    ohos:top_margin="20vp"
+                    ohos:truncation_mode="ellipsis_at_end"
+                    />
+
+                <DirectionalLayout
+                    ohos:height="match_content"
+                    ohos:width="match_parent"
+                    ohos:bottom_margin="14vp"
+                    ohos:layout_alignment="bottom"
+                    ohos:min_height="25vp"
+                    ohos:orientation="horizontal"
+                    ohos:right_padding="12vp"
+                    ohos:top_margin="15vp">
+
+                    <Text
+                        ohos:height="match_content"
+                        ohos:width="match_content"
+                        ohos:text="￥"
+                        ohos:text_color="#ec0f38"
+                        ohos:text_size="14fp"
+                        ohos:text_weight="500"
+                        />
+
+                    <Text
+                        ohos:id="$+id:tv_new_price"
+                        ohos:height="match_content"
+                        ohos:width="match_content"
+                        ohos:left_margin="3vp"
+                        ohos:text="1314"
+                        ohos:text_color="#ec0f38"
+                        ohos:text_size="21fp"
+                        ohos:text_weight="500"
+                        />
+
+                    <Text
+                        ohos:id="$+id:tv_old_price"
+                        ohos:height="match_content"
+                        ohos:width="match_content"
+                        ohos:layout_alignment="vertical_center"
+                        ohos:left_margin="7vp"
+                        ohos:text="520"
+                        ohos:text_color="#888888"
+                        ohos:text_size="13fp"
+                        />
+
+                </DirectionalLayout>
+
+                <Component
+                    ohos:height="1vp"
+                    ohos:width="match_parent"
+                    ohos:alpha=".4"
+                    ohos:background_element="#dddddd"/>
+
+            </DirectionalLayout>
+
+            <Component
+                ohos:height="1vp"
+                ohos:width="match_parent"
+                ohos:alpha=".4"
+                ohos:background_element="#dddddd"
+                ohos:top_margin="10vp"/>
+
+            <DirectionalLayout
+                ohos:id="$+id:ll_current_goods"
+                ohos:height="match_content"
+                ohos:width="match_parent"
+                ohos:background_element="#FFFFFF"
+                ohos:bottom_padding="15vp"
+                ohos:left_padding="12vp"
+                ohos:right_padding="12vp"
+                ohos:top_padding="15vp">
+
+                <Text
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:text="已选"
+                    ohos:text_color="#888888"
+                    ohos:text_size="13fp"
+                    />
+
+                <Text
+                    ohos:id="$+id:tv_current_goods"
+                    ohos:height="match_content"
+                    ohos:width="0"
+                    ohos:left_margin="10vp"
+                    ohos:right_margin="20vp"
+                    ohos:text="黑色, 1件"
+                    ohos:text_color="#222222"
+                    ohos:text_size="14fp"
+                    ohos:weight="1"
+                    />
+
+            </DirectionalLayout>
+
+            <Component
+                ohos:height="1vp"
+                ohos:width="match_parent"
+                ohos:alpha=".4"
+                ohos:background_element="#dddddd"/>
+
+            <Image
+                ohos:height="44vp"
+                ohos:width="match_parent"
+                ohos:background_element="#FFFFFF"
+                ohos:bottom_margin="10vp"
+                ohos:layout_alignment="horizontal_center"
+                ohos:top_margin="10vp"/>
+
+            <Component
+                ohos:height="1vp"
+                ohos:width="match_parent"
+                ohos:alpha=".4"
+                ohos:background_element="#dddddd"/>
+
+
+            <DirectionalLayout
+                ohos:id="$+id:ll_comment"
+                ohos:height="44vp"
+                ohos:width="match_parent"
+                ohos:background_element="#FFFFFF"
+                ohos:layout_alignment="vertical_center"
+                ohos:left_padding="12vp"
+                ohos:right_padding="12vp">
+
+                <DirectionalLayout
+                    ohos:height="match_parent"
+                    ohos:width="0vp"
+                    ohos:layout_alignment="vertical_center"
+                    ohos:weight="1">
+
+                    <Text
+                        ohos:height="match_content"
+                        ohos:width="match_content"
+                        ohos:text="用户点评"
+                        ohos:text_color="#222222"
+                        ohos:text_size="13fp"
+                        />
+
+                    <Text
+                        ohos:id="$+id:tv_comment_count"
+                        ohos:height="match_content"
+                        ohos:width="match_content"
+                        ohos:left_margin="10vp"
+                        ohos:text="(0)"
+                        ohos:text_color="#222222"
+                        ohos:text_size="13fp"
+                        />
+
+                </DirectionalLayout>
+
+            </DirectionalLayout>
+
+            <Component
+                ohos:height="1vp"
+                ohos:width="match_parent"
+                ohos:alpha=".4"
+                ohos:background_element="#dddddd"/>
+
+            <DirectionalLayout
+                ohos:id="$+id:ll_empty_comment"
+                ohos:height="200vp"
+                ohos:width="match_parent"
+                ohos:alignment="center"
+                ohos:background_element="#FFFFFF"
+                ohos:orientation="vertical">
+
+                <Text
+                    ohos:height="match_content"
+                    ohos:width="match_content"
+                    ohos:layout_alignment="center"
+                    ohos:text="暂无精华评论"
+                    ohos:text_color="#888888"
+                    ohos:text_size="13fp"
+                    />
+
+            </DirectionalLayout>
+
+            <Text
+                ohos:id="$+id:tv_bottom_view"
+                ohos:height="100vp"
+                ohos:width="match_parent"
+                ohos:layout_alignment="center"
+                ohos:left_margin="6vp"
+                ohos:text="上拉查看图文详情"
+                ohos:text_alignment="center"
+                ohos:text_color="#222222"
+                ohos:text_size="14fp"
+                />
+
+
+        </DirectionalLayout>
+
+    </NestedScrollView>
+
+    <Button
+        ohos:id="$+id:btn"
+        ohos:height="match_content"
+        ohos:width="match_content"
+        ohos:text="回到顶部"/>
+
+</StackLayout>
