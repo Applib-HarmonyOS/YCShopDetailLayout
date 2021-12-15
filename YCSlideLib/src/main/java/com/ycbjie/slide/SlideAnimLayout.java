@@ -33,6 +33,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
          * 打开
          */
         OPEN;
+
         public static Status valueOf(int stats) {
             if (0 == stats) {
                 return CLOSE;
@@ -94,6 +95,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
     /**
      * 打开商详页
+     *
      * @param smooth
      */
     public void smoothOpen(boolean smooth) {
@@ -101,20 +103,21 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
             mStatus = Status.OPEN;
             //控件的高度+动画布局
             final float height = -getEstimatedHeight() - animHeight;
-            LoggerUtils.i("SlideLayout---smoothOpen---", ""+height);
+            LoggerUtils.i("SlideLayout---smoothOpen---", "" + height);
             animatorSwitch(0, height, true, smooth ? mDuration : 0);
         }
     }
 
     /**
      * 关闭商详页
+     *
      * @param smooth
      */
     public void smoothClose(boolean smooth) {
         if (mStatus != Status.CLOSE) {
             mStatus = Status.CLOSE;
             final float height = -getEstimatedHeight();
-            LoggerUtils.i("SlideLayout---smoothClose---",""+height);
+            LoggerUtils.i("SlideLayout---smoothClose---", "" + height);
             animatorSwitch(height, 0, true, smooth ? mDuration : 0);
         }
     }
@@ -125,18 +128,18 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
             throw new RuntimeException("SlideDetailsLayout only accept child more than 1!!");
         }
 
-        LoggerUtils.i("获取子节点的个数",""+childCount);
+        LoggerUtils.i("获取子节点的个数", "" + childCount);
         mFrontView = getComponentAt(0);
         mAnimView = getComponentAt(1);
         mBehindView = getComponentAt(2);
 
         mEventHandler.postTask(() -> {
             animHeight = mAnimView.getHeight();
-            LoggerUtils.i("获取控件高度",""+animHeight);
+            LoggerUtils.i("获取控件高度", "" + animHeight);
         });
 
 
-        if(mDefaultPanel == 1){
+        if (mDefaultPanel == 1) {
             mEventHandler.postTask(() -> smoothOpen(false));
         }
     }
@@ -150,7 +153,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
     public void onComponentUnboundFromWindow(Component component) {
         setScrollStatusListener(null);
         setOnSlideStatusListener(null);
-        if (animator!=null){
+        if (animator != null) {
             animator.cancel();
             animator = null;
         }
@@ -170,13 +173,13 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
                 continue;
             }
             //当孩子控件是动画控件时，则特殊处理
-            if(getComponentAt(i) == mAnimView){
-                child.estimateSize(0,0);
+            if (getComponentAt(i) == mAnimView) {
+                child.estimateSize(0, 0);
                 int measuredHeight = child.getEstimatedHeight();
                 int makeMeasureSpec = EstimateSpec.getSizeWithMode(measuredHeight, EstimateSpec.PRECISE);
-                LogUtil.info("onMeasure获取控件高度",""+measuredHeight);
+                LogUtil.info("onMeasure获取控件高度", "" + measuredHeight);
                 child.estimateSize(childWidthMeasureSpec, makeMeasureSpec);
-            } else{
+            } else {
                 child.estimateSize(childWidthMeasureSpec, childHeightMeasureSpec);
             }
         }
@@ -195,12 +198,12 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
             if (child.getVisibility() == INVISIBLE) {
                 continue;
             }
-            LoggerUtils.i("onLayout，offset---",""+offset);
+            LoggerUtils.i("onLayout，offset---", "" + offset);
             int measuredHeight = getComponentAt(1).getEstimatedHeight();
             if (child == mBehindView) {
-                top = b + offset + measuredHeight ;
+                top = b + offset + measuredHeight;
                 bottom = top + b - t + measuredHeight;
-            }else if(child == mAnimView){
+            } else if (child == mAnimView) {
                 top = b + offset;
                 bottom = top - t + child.getEstimatedHeight();
             } else {
@@ -275,12 +278,12 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
                 final float yDiff = y - mInitMotionY;
                 boolean childScrollVertically = canChildScrollVertically(((int) yDiff));
                 //在关闭状态并且滑动位移小于等于0时
-                boolean isDiffZero = yDiff<=0 && Status.OPEN == mStatus;
-                boolean isAnimOpen = Status.OPEN == mStatus && yDiff>=animHeight;
-                boolean isAnimClose = Status.CLOSE == mStatus && Math.abs(yDiff)>=animHeight;
-                if (childScrollVertically  || isDiffZero) {
+                boolean isDiffZero = yDiff <= 0 && Status.OPEN == mStatus;
+                boolean isAnimOpen = Status.OPEN == mStatus && yDiff >= animHeight;
+                boolean isAnimClose = Status.CLOSE == mStatus && Math.abs(yDiff) >= animHeight;
+                if (childScrollVertically || isDiffZero) {
                     wantTouch = false;
-                }else if(isAnimOpen|| isAnimClose){
+                } else if (isAnimOpen || isAnimClose) {
                     wantTouch = true;
                 } else {
                     processTouchEvent(yDiff);
@@ -300,7 +303,8 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
     /**
      * 设置方法是触摸滑动的时候
-     * @param offset                        offset
+     *
+     * @param offset offset
      */
     private void processTouchEvent(final float offset) {
         if (Math.abs(offset) < mTouchSlop) {
@@ -323,7 +327,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         postLayout();
     }
 
-    private void positiveOffsetUpdate(float offset){
+    private void positiveOffsetUpdate(float offset) {
         if (offset >= 0) {
             mSlideOffset = 0;
         } else {
@@ -331,39 +335,36 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         }
     }
 
-    private void negativeOffsetUpdate(float offset, float pHeight){
+    private void negativeOffsetUpdate(float offset, float pHeight) {
         if (offset <= 0) {
             mSlideOffset = pHeight;
         } else {
-            mSlideOffset = pHeight- animHeight + offset;
+            mSlideOffset = pHeight - animHeight + offset;
         }
     }
 
-    private void updateListener(float offset){
+    private void updateListener(float offset) {
         if (Status.CLOSE == mStatus) {
-            if (offset <= -animHeight/2) {
-                LoggerUtils.i("准备翻下页，已超过一半", "");
-                if(listener!=null){
-                    listener.onStatusChanged(mStatus, true);
-                }
-            } else {
-                LoggerUtils.i("准备翻下页，不超过一半","");
-                if(listener!=null){
-                    listener.onStatusChanged(mStatus, false);
-                }
-            }
+            positiveOffsetListenerUpdate(offset);
         } else if (Status.OPEN == mStatus) {
-            if ((offset ) >= animHeight/2) {
-                if(listener!=null){
-                    listener.onStatusChanged(mStatus, false);
-                }
-                LoggerUtils.i("准备翻上页，已超过一半:offset:",""+offset+"--->pHeight:"+"--->:"+animHeight);
-            } else {
-                if(listener!=null){
-                    listener.onStatusChanged(mStatus, true);
-                }
-                LoggerUtils.i("准备翻上页，不超过一半",""+offset+"--->pHeight:"+"--->:"+animHeight);
-            }
+            negativeOffsetListenerUpdate(offset);
+        }
+    }
+
+    private void positiveOffsetListenerUpdate(float offset) {
+        if (offset <= -animHeight / 2) {
+            listener.onStatusChanged(mStatus, true);
+        } else {
+            listener.onStatusChanged(mStatus, false);
+
+        }
+    }
+
+    private void negativeOffsetListenerUpdate(float offset) {
+        if ((offset) >= animHeight / 2) {
+            listener.onStatusChanged(mStatus, false);
+        } else {
+            listener.onStatusChanged(mStatus, true);
         }
     }
 
@@ -372,27 +373,27 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
      */
     private void finishTouchEvent() {
         final int pHeight = getEstimatedHeight();
-        LoggerUtils.i("finishTouchEvent------pHeight---",""+pHeight);
+        LoggerUtils.i("finishTouchEvent------pHeight---", "" + pHeight);
         final float offset = mSlideOffset;
         boolean changed = false;
         if (Status.CLOSE == mStatus) {
-            if (offset <= (float) -animHeight /2) {
-                mSlideOffset =(float) -pHeight - animHeight;
+            if (offset <= (float) -animHeight / 2) {
+                mSlideOffset = (float) -pHeight - animHeight;
                 mStatus = Status.OPEN;
                 changed = true;
             } else {
                 mSlideOffset = 0;
             }
-            LoggerUtils.i("finishTouchEvent----CLOSE--mSlideOffset---",""+mSlideOffset);
+            LoggerUtils.i("finishTouchEvent----CLOSE--mSlideOffset---", "" + mSlideOffset);
         } else if (Status.OPEN == mStatus) {
-            if ((offset + pHeight) >=(float) -animHeight/2) {
+            if ((offset + pHeight) >= (float) -animHeight / 2) {
                 mSlideOffset = 0;
                 mStatus = Status.CLOSE;
                 changed = true;
             } else {
-                mSlideOffset =(float) -pHeight - animHeight;
+                mSlideOffset = (float) -pHeight - animHeight;
             }
-            LoggerUtils.i("finishTouchEvent----OPEN-----",""+mSlideOffset);
+            LoggerUtils.i("finishTouchEvent----OPEN-----", "" + mSlideOffset);
         }
         animatorSwitch(offset, mSlideOffset, changed);
     }
@@ -436,7 +437,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
                         isFirstShowBehindView = false;
                         mBehindView.setVisibility(VISIBLE);
                     }
-                    if (onSlideStatusListener!=null){
+                    if (onSlideStatusListener != null) {
                         onSlideStatusListener.onStatusChanged(mStatus);
                     }
                 }
@@ -468,10 +469,11 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
     /**
      * 是否可以滑动，direction为负数时表示向下滑动，反之表示向上滑动。
-     * @param direction                         direction
+     *
+     * @param direction direction
      * @return
      */
-       protected boolean canChildScrollVertically(int direction) {
+    protected boolean canChildScrollVertically(int direction) {
         if (mTarget instanceof ListContainer) {
             return canListViewScroll((ListContainer) mTarget);
         } else if (mTarget instanceof StackLayout || mTarget instanceof DependentLayout ||
@@ -500,26 +502,29 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         }
     }
 
-    public interface onScrollStatusListener{
+    public interface onScrollStatusListener {
         /**
          * 监听方法
-         * @param status            状态
-         * @param isHalf            是否是一半距离
+         *
+         * @param status 状态
+         * @param isHalf 是否是一半距离
          */
         void onStatusChanged(Status status, boolean isHalf);
     }
 
     private onScrollStatusListener listener;
 
-    public void setScrollStatusListener(onScrollStatusListener listener){
+    public void setScrollStatusListener(onScrollStatusListener listener) {
         this.listener = listener;
     }
 
     private OnSlideStatusListener onSlideStatusListener;
+
     public interface OnSlideStatusListener {
         void onStatusChanged(Status status);
     }
-    public void setOnSlideStatusListener(OnSlideStatusListener listener){
+
+    public void setOnSlideStatusListener(OnSlideStatusListener listener) {
         this.onSlideStatusListener = listener;
     }
 }
