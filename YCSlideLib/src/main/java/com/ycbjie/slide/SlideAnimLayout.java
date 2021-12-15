@@ -369,7 +369,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         boolean changed = false;
         if (Status.CLOSE == mStatus) {
             if (offset <= (float) -animHeight /2) {
-                mSlideOffset = -pHeight - animHeight;
+                mSlideOffset =(float) -pHeight - animHeight;
                 mStatus = Status.OPEN;
                 changed = true;
             } else {
@@ -382,7 +382,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
                 mStatus = Status.CLOSE;
                 changed = true;
             } else {
-                mSlideOffset = -pHeight - animHeight;
+                mSlideOffset =(float) -pHeight - animHeight;
             }
             LoggerUtils.i("finishTouchEvent----OPEN-----",""+mSlideOffset);
         }
