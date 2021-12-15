@@ -308,26 +308,38 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         }
         final float oldOffset = mSlideOffset;
         if (mStatus == Status.CLOSE) {
-            if (offset >= 0) {
-                mSlideOffset = 0;
-            } else {
-                mSlideOffset = offset;
-            }
+            positiveOffsetUpdate(offset);
             if (mSlideOffset == oldOffset) {
                 return;
             }
         } else if (mStatus == Status.OPEN) {
             final float pHeight = -getEstimatedHeight();
-            if (offset <= 0) {
-                mSlideOffset = pHeight;
-            } else {
-                mSlideOffset = pHeight- animHeight + offset;
-            }
+            negativeOffsetUpdate(offset, pHeight);
             if (mSlideOffset == oldOffset) {
                 return;
             }
         }
+        updateListener(offset);
+        postLayout();
+    }
 
+    private void positiveOffsetUpdate(float offset){
+        if (offset >= 0) {
+            mSlideOffset = 0;
+        } else {
+            mSlideOffset = offset;
+        }
+    }
+
+    private void negativeOffsetUpdate(float offset, float pHeight){
+        if (offset <= 0) {
+            mSlideOffset = pHeight;
+        } else {
+            mSlideOffset = pHeight- animHeight + offset;
+        }
+    }
+
+    private void updateListener(float offset){
         if (Status.CLOSE == mStatus) {
             if (offset <= -animHeight/2) {
                 LoggerUtils.i("准备翻下页，已超过一半", "");
@@ -353,7 +365,6 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
                 LoggerUtils.i("准备翻上页，不超过一半",""+offset+"--->pHeight:"+"--->:"+animHeight);
             }
         }
-        postLayout();
     }
 
     /**
