@@ -143,7 +143,7 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
     @Override
     public void onComponentBoundToWindow(Component component) {
-
+        //Do Nothing
     }
 
     @Override
@@ -200,15 +200,12 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
             if (child == mBehindView) {
                 top = b + offset + measuredHeight ;
                 bottom = top + b - t + measuredHeight;
-                LoggerUtils.i("onLayout，mBehindView---",""+top+"-----"+bottom);
             }else if(child == mAnimView){
                 top = b + offset;
                 bottom = top - t + child.getEstimatedHeight();
-                LoggerUtils.i("onLayout，mAnimView---",""+top+"-----"+bottom);
             } else {
                 top = t + offset;
                 bottom = b + offset;
-                LoggerUtils.i("onLayout，other---",""+top+"-----"+bottom);
             }
             child.arrange(l, top, r, bottom);
         }
@@ -408,17 +405,17 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
         animator.setStateChangedListener(new Animator.StateChangedListener() {
             @Override
             public void onStart(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
             public void onStop(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
             public void onCancel(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
@@ -436,12 +433,12 @@ public class SlideAnimLayout extends ComponentContainer implements Component.Bin
 
             @Override
             public void onPause(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
             public void onResume(Animator animator) {
-
+                //Do Nothing
             }
         });
 

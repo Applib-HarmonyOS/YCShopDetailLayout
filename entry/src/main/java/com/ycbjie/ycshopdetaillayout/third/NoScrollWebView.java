@@ -18,7 +18,7 @@ public class NoScrollWebView extends WebView implements Component.EstimateSizeLi
     }
 
     private void initView() {
-
+        //Do Nothing
     }
 
     @Override

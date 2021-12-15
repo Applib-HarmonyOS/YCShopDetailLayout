@@ -292,17 +292,17 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
         animator.setStateChangedListener(new Animator.StateChangedListener() {
             @Override
             public void onStart(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
             public void onStop(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
             public void onCancel(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
@@ -320,12 +320,12 @@ public class SlideLayout extends ComponentContainer implements Component.Estimat
 
             @Override
             public void onPause(Animator animator) {
-
+                //Do Nothing
             }
 
             @Override
             public void onResume(Animator animator) {
-
+                //Do Nothing
             }
         });
 
