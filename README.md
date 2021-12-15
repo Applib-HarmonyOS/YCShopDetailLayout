@@ -29,23 +29,23 @@ implementation 'dev.applibgroup:YCShopDetailLayout:1.0.0'
 - SlideDetailsLayout has two child Views: one is the product page layout, the other is the detail page layout
 - In the layout
     ```
-    <com.ycbjie.slide.SlideLayout
-        android:id="@+id/slideDetailsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:default_panel="front"
-        app:duration="200"
-        app:percent="0.1">
+   <com.ycbjie.slide.SlideLayout
+        ohos:id="$+id:slideDetailsLayout"
+        ohos:height="match_parent"
+        ohos:width="match_parent"
+        custom:default_panel="0"
+        custom:duration="200"
+        custom:percent="0.1">
 
-        <!--商品布局-->
-        <FrameLayout
-            android:id="@+id/fl_shop_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <StackLayout
+        ohos:id="$+id:fl_shop_main"
+        ohos:height="match_content"
+        ohos:width="match_parent"/>
 
-        <!--分页详情webView布局-->
-        <include layout="@layout/include_shop_detail"/>
-
+        <include
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:layout="$layout:include_shop_detail"/>
 
     </com.ycbjie.slide.SlideLayout>
     ```
@@ -56,10 +56,10 @@ implementation 'dev.applibgroup:YCShopDetailLayout:1.0.0'
         public void onStatusChanged(SlideLayout.Status status) {
             if (status == SlideLayout.Status.OPEN) {
                 //当前为图文详情页
-                Log.e("FirstActivity","下拉回到商品详情");
+                Log.e("FirstAbility","下拉回到商品详情");
             } else {
                 //当前为商品详情页
-                Log.e("FirstActivity","继续上拉，查看图文详情");
+                Log.e("FirstAbility","继续上拉，查看图文详情");
             }
         }
     });
@@ -74,82 +74,79 @@ implementation 'dev.applibgroup:YCShopDetailLayout:1.0.0'
 - SlideAnimLayout has three child Views: one is the product page layout, the other is the pull-up loading animation layout, and the other is the detail page layout
 - In the layout
     ```
-       <com.ycbjie.slide.SlideAnimLayout
-            android:id="@+id/slideDetailsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:default_panel="front"
-            app:duration="200"
-            app:percent="0.1">
+        <com.ycbjie.slide.SlideAnimLayout
+        ohos:id="$+id:slideDetailsLayout"
+        ohos:height="0vp"
+        ohos:width="match_parent"
+        ohos:weight="1"
+        custom:default_panel="0"
+        custom:duration="200"
+        custom:percent="0.1">
 
-            <!--商品布局-->
-            <FrameLayout
-                android:id="@+id/fl_shop_main2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+        <StackLayout
+            ohos:id="$+id:fl_shop_main2"
+            ohos:height="match_parent"
+            ohos:width="match_parent"/>
 
-            <!--上拉加载动画布局-->
-            <LinearLayout
-                android:id="@+id/ll_page_more"
-                android:orientation="vertical"
-                android:background="@color/colorAccent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/iv_more_img"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:rotation="180"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/icon_details_page_down_loading" />
-                <TextView
-                    android:id="@+id/tv_more_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="25dp"
-                    android:gravity="center"
-                    android:text="测试动画，继续上拉，查看图文详情"
-                    android:textSize="13sp" />
-            </LinearLayout>
+        <DirectionalLayout
+            ohos:id="$+id:ll_page_more"
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:orientation="vertical">
 
-            <!--分页详情webView布局-->
-            <include layout="@layout/include_shop_detail"/>
+            <Image
+                ohos:id="$+id:iv_more_img"
+                ohos:height="40vp"
+                ohos:width="40vp"
+                ohos:image_src="$media:icon_details_page_down_loading"
+                ohos:layout_alignment="horizontal_center"
+                ohos:rotate="180"
+                />
 
+            <Text
+                ohos:id="$+id:tv_more_text"
+                ohos:height="match_content"
+                ohos:width="match_content"
+                ohos:bottom_margin="25vp"
+                ohos:layout_alignment="horizontal_center"
+                ohos:text="测试动画，继续上拉，查看图文详情"
+                ohos:text_alignment="center"
+                ohos:text_size="13fp"
+                />
 
-        </com.ycbjie.slide.SlideAnimLayout>
+        </DirectionalLayout>
+
+        <include
+            ohos:height="match_content"
+            ohos:width="match_parent"
+            ohos:layout="$layout:include_shop_detail"/>
+
+    </com.ycbjie.slide.SlideAnimLayout>
     ```
 - In the code
     ```
-    mSlideDetailsLayout.setScrollStatusListener(new SlideAnimLayout.onScrollStatusListener() {
-        @Override
-        public void onStatusChanged(SlideAnimLayout.Status mNowStatus, boolean isHalf) {
-            if(mNowStatus== SlideAnimLayout.Status.CLOSE){
-                //打开
-                if(isHalf){
-                    mTvMoreText.setText("释放，查看图文详情");
-                    mIvMoreImg.animate().rotation(0);
-                    LoggerUtils.i("onStatusChanged---CLOSE---释放"+isHalf);
-                }else{//关闭
-                    mTvMoreText.setText("继续上拉，查看图文详情");
-                    mIvMoreImg.animate().rotation(180);
-                    LoggerUtils.i("onStatusChanged---CLOSE---继续上拉"+isHalf);
-                }
-            }else{
-                //打开
-                if(isHalf){
-                    mTvMoreText.setText("下拉回到商品详情");
-                    mIvMoreImg.animate().rotation(0);
-                    LoggerUtils.i("onStatusChanged---OPEN---下拉回到商品详情"+isHalf);
-                }else{//关闭
-                    mTvMoreText.setText("释放回到商品详情");
-                    mIvMoreImg.animate().rotation(180);
-                    LoggerUtils.i("onStatusChanged---OPEN---释放回到商品详情"+isHalf);
+     mSlideDetailsLayout.setScrollStatusListener(new SlideAnimLayout.onScrollStatusListener() {
+            @Override
+            public void onStatusChanged(SlideAnimLayout.Status mNowStatus,boolean isHalf) {
+                if(mNowStatus==SlideAnimLayout.Status.CLOSE){
+                    if(isHalf){//打开
+                        mTvMoreText.setText("释放，查看图文详情");
+                        mIvMoreImg.createAnimatorProperty().rotate(0).start();
+                    }else{//关闭
+                        mTvMoreText.setText("继续上拉，查看图文详情");
+                        mIvMoreImg.createAnimatorProperty().rotate(180).start();
+                    }
+                }else{
+                    if(isHalf){//打开
+                        mTvMoreText.setText("下拉回到商品详情");
+                        mIvMoreImg.createAnimatorProperty().rotate(0).start();
+                    }else{//关闭
+                        mTvMoreText.setText("释放回到商品详情");
+                        mIvMoreImg.createAnimatorProperty().rotate(180).start();
+                    }
                 }
             }
-        }
-    });
+        });
 
     //关闭商详页
     mSlideDetailsLayout.smoothClose(true);
@@ -214,60 +211,4 @@ implementation 'dev.applibgroup:YCShopDetailLayout:1.0.0'
         }
     }
     ```
-
-
-
-### 05.Optimization problem
-- Abnormal situation save state
-    ```
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        SavedState ss = new SavedState(super.onSaveInstanceState());
-        ss.offset = mSlideOffset;
-        ss.status = mStatus.ordinal();
-        return ss;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        mSlideOffset = ss.offset;
-        mStatus = Status.valueOf(ss.status);
-        if (mStatus == Status.OPEN) {
-            mBehindView.setVisibility(VISIBLE);
-        }
-        requestLayout();
-    }
-    ```
-- When the page is destroyed, remove the listener and remove the animation resources
-    ```
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        setScrollStatusListener(null);
-        setOnSlideStatusListener(null);
-        if (animator!=null){
-            animator.cancel();
-            animator = null;
-        }
-    }
-    ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
